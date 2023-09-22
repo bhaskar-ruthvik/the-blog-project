@@ -29,7 +29,7 @@ export default function CustomSection(category: Category){
         });
         setData(items)
       })()
-  },[])
+  },[loading,data])
     return (
 <div>
 <div className="w-full flex  justify-between items-end">

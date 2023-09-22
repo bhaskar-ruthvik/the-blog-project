@@ -28,7 +28,7 @@ export default function AllPosts({ params }: { params: { category: string }}){
         });
         setData(items)
         })()
-    },[])
+    },[loading,data])
     return (<>
       <Navbar/>
     <div className="container w-full">

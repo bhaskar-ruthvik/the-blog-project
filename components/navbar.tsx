@@ -41,7 +41,7 @@ export default function Navbar() {
                 }
             })
         })()
-    },[])
+    },[login,mode])
     function toggle(){
         if(mode == "light"){
             setMode("dark")

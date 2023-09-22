@@ -27,7 +27,7 @@ export default function AllPosts({ params }: { params: { category: string,postId
             setData(doc.data())
         });
         })()
-    },[])
+    },[loading,data])
     return (<>
       <Navbar/>
     <div className="container sm:px-[2rem] px-[0.2rem]  w-full">
