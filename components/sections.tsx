@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from "react"
 import ListItem from "./ui/list-item"
 import { DocumentData, collection, getDocs } from "firebase/firestore"

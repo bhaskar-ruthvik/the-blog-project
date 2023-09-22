@@ -10,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import {useRouter} from 'next/navigation'
+import { PenSquare } from "lucide-react";
 export default function Login(){
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
@@ -41,8 +42,10 @@ export default function Login(){
             width={720}
             sizes="100vw"/>
             <div className='w-full h-full flex flex-col items-center justify-center text-light'>
-                <Link href={'/'}>
-                <p className="text-4xl py-3">👸 Cutieblogg</p>
+            
+                <Link href={'/'} className="flex items-center">
+                <PenSquare className="text-orange-400"/>
+                <p className="text-4xl py-3 px-2">Blog.ly</p>
                 </Link>
             
          <div className="grid w-full max-w-sm items-center gap-1.5 py-5">

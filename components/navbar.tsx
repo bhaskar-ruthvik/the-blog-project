@@ -17,7 +17,7 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
-import { Book, Clapperboard, Cloud, CreditCard, Github, Home, Keyboard, LifeBuoy, LogIn, LogOut, Mail, MessageSquare, Pen, Plus, PlusCircle, Settings, Trophy, Tv, User, UserPlus, Users } from "lucide-react"
+import { Book, Clapperboard, Cloud, CreditCard, Github, Home, Keyboard, LifeBuoy, LogIn, LogOut, Mail, MessageSquare, Pen, PenSquare, PenTool, Plus, PlusCircle, Settings, Trophy, Tv, User, UserPlus, Users } from "lucide-react"
 import Link from "next/link"
 import { auth } from "@/ firebase/firebase"
 import { onAuthStateChanged } from "firebase/auth"
@@ -66,7 +66,7 @@ export default function Navbar() {
         router.push('/')
     }
     return (
-        <div className="container flex h-14 items-center bg-opacity-0">
+        <div className="container sm:px-20 px-12 flex h-14 items-center bg-opacity-0">
             <div className="md:flex-1 items-center md:flex md:space-x-2 justify-start">
             <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -143,9 +143,10 @@ export default function Navbar() {
             
             </div>
         
-        <div className="flex md:flex-1 px-2 md:px-0 items-center justify-start md:space-x-2 md:justify-center">
+        <div className="flex md:flex-1 px-2 md:px-0 items-center justify-center md:space-x-2 md:justify-center">
         <a className="sm:mr-6 flex items-center space-x-2" href="/">
-        <span className=""><p className={poppins.className + 'text-sm'}>👸 Cutiebloggg</p></span></a>
+        <PenSquare className="text-orange-400"/>
+        <p className='text-xl'>Blog.ly</p></a>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2 md:justify-end">
        
