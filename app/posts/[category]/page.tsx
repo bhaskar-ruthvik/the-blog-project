@@ -35,7 +35,7 @@ export default function AllPosts({ params }: { params: { category: string }}){
     {data.length!=0 ?
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-auto gap-20 mt-6 mx-6">
             {data.map((item,index) => {
-              return <Link href={'/posts/' + params.category + '/' + item.id}><ListItem {...item} key={index}/></Link>
+              return <Link href={'/posts/' + params.category + '/' + item.id} key={index}><ListItem {...item}/></Link>
             }) }
             </div>: loading ?  <div className="flex items-center space-x-4">
             
