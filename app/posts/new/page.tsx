@@ -51,12 +51,11 @@ export default function Post(){
             await auth.authStateReady()
            if(auth.currentUser!=null) return;
            else{
-            console.log(auth.currentUser)
             router.push('/')
            }
            
         })()
-    },[])
+    },[router])
     function handleChange(e:any){
         setPath(e.target.files[0])
       }

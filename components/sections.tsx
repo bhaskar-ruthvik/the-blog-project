@@ -29,7 +29,7 @@ export default function CustomSection(category: Category){
         });
         setData(items)
       })()
-  },[loading,data])
+  },[loading,data,category.name])
     return (
 <div>
 <div className="w-full flex  justify-between items-end">
@@ -55,8 +55,8 @@ export default function CustomSection(category: Category){
       {data.length!=0 ?
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-1 gap-20 mt-6 mx-6">
       {data.slice(0,3).map((item,index) => {
-        return <Link href={'posts/' + category.name + '/'+ item.id}>
-          <ListItem {...item} key={index}/>
+        return <Link key={index} href={'posts/' + category.name + '/'+ item.id}>
+          <ListItem {...item}/>
         </Link>
       
       }) }

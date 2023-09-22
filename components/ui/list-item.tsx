@@ -11,7 +11,6 @@ type ItemType = {
 }
 
 export default function ListItem(item: ItemType){
-    console.log(item)
     return (
         <div className='flex justify-center'>
       
