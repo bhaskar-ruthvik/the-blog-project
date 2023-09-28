@@ -76,7 +76,7 @@ export default function EditPost({params} : { params: { category: string,postId:
               setLoading(false)
        
     })()
-    },[router])
+    },[router,params.category,params.postId,data])
     
       function handleTitle(e:any){
         setTitle(e.target.value)
