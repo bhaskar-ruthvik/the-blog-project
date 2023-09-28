@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import ListItem from "./ui/list-item"
-import { DocumentData, collection, getDocs } from "firebase/firestore"
+import { DocumentData, Timestamp, collection, getDocs } from "firebase/firestore"
 import { firestore } from "@/ firebase/firebase"
 import { poppins } from "./fonts"
 import Link from "next/link"
@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 interface Item{
     id: string,
     title: string,
-    date: Date,
+    date: Timestamp,
     url: string,
     subtitle: string,
     text:string
