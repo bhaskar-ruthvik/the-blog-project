@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 interface Item{
     id: string,
     title: string,
+    date: Date,
     url: string,
     subtitle: string,
     text:string

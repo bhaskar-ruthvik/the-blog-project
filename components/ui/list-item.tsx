@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { poppins } from "../fonts";
+import { Timestamp } from "firebase/firestore";
 
 type ItemType = {
     id: string,
     title: string,
+    date: Timestamp,
     url: string,
     subtitle: string,
     text: string

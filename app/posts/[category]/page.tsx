@@ -4,12 +4,13 @@ import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
 import ListItem from "@/components/ui/list-item"
 import { Skeleton } from "@/components/ui/skeleton"
-import { DocumentData, collection, getDocs, query, where } from "firebase/firestore"
+import { DocumentData, Timestamp, collection, getDocs, query, where } from "firebase/firestore"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 interface Item{
     id: string,
     title: string,
+    date: Timestamp,
     url: string,
     subtitle: string,
     text:string

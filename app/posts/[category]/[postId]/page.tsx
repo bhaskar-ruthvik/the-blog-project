@@ -1,16 +1,18 @@
 "use client"
-import { firestore } from "@/ firebase/firebase"
+import { auth, firestore } from "@/ firebase/firebase"
 import { poppins } from "@/components/fonts"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
-import ListItem from "@/components/ui/list-item"
-import { Skeleton } from "@/components/ui/skeleton"
-import { DocumentData, collection, getDocs, query, where } from "firebase/firestore"
+import { Button } from "@/components/ui/button"
+import { DocumentData, Timestamp, collection, deleteDoc, deleteField, doc, getDocs, query, where } from "firebase/firestore"
+
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 interface Item{
     id: string,
     title: string,
+    date:Timestamp,
     url: string,
     subtitle: string,
     text:string
@@ -18,8 +20,21 @@ interface Item{
 export default function AllPosts({ params }: { params: { category: string,postId: string }}){
     const [loading,setLoading] = useState(false)
     const [data,setData] = useState<Item>()
+    const [isLogin,setIsLogin] = useState(false)
+    const router = useRouter()
+    async function handleDelete(){
+      const querySnapshot = await getDocs(query(collection(firestore,params.category),where('id','==',params.postId)))
+       const temp = querySnapshot.docs.at(0)
+            await deleteDoc(doc(firestore,params.category,temp?.id as string))
+      router.push('/')
+    }
+    function handleEdit(){
+        router.push('/posts/'+ params.category+'/' + params.postId+ '/edit')
+    }
     useEffect(()=>{
         (async()=>{
+          await auth.authStateReady()
+          if(auth.currentUser!=null) setIsLogin(true)
             setLoading(true)
          const querySnapshot =  await getDocs(query(collection(firestore,params.category),where('id','==',params.postId)))
          setLoading(false)
@@ -55,16 +70,28 @@ export default function AllPosts({ params }: { params: { category: string,postId
         </div>
 
         <span className="capitalize text-gray pt-2 dark:text-light/50 font-semibold text-sm  sm:text-base">
-        22nd September 2023
+        {data.date.toDate().toDateString()}
         </span>
       </div>
       <div className="mt-10 overflow-scroll overflow-x-hidden max-h-[60vh] " style={{scrollbarWidth: `none`}}> 
         <p className="text-sm md:text-md">
-            {data.text}
+
+      {data.text}
+
+            
         </p>
       </div>
         </div>
         </div> : <h1>Please wait</h1>}
+       {isLogin &&  <div className="grid lg:grid-cols-2 grid-cols-1 justify-center grid-rows-auto gap-5 md:gap-y-20 gap-y-10 mt-10 mx-6">
+         <div className="flex md:justify-end justify-center">
+         <Button className="px-10 w-4" onClick={handleEdit}>Edit</Button>
+          </div>
+         <div className="flex md:justify-start justify-center">
+         <Button className="px-10 w-4" onClick={handleDelete}>Delete</Button>
+         </div>
+        
+        </div>}
     </div>
     <div className="container w-full">
           <hr className='border-0 h-[0.2rem] bg-orange-400 mt-20' ></hr>

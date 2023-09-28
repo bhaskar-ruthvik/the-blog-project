@@ -11,14 +11,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
-import { Timestamp, addDoc, collection } from "firebase/firestore";
+import { DocumentData, Timestamp, addDoc, collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import firebase from 'firebase/app'
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {v4} from "uuid"
-
+interface Item{
+    id: string,
+    title: string,
+    date:Timestamp,
+    url: string,
+    subtitle: string,
+    text:string
+  }
 const frameworks = [
     {
       value: "movies",
@@ -38,7 +45,7 @@ const frameworks = [
     },
     
   ]
-export default function Post(){
+export default function EditPost({params} : { params: { category: string,postId: string }}){
     const router = useRouter()
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
@@ -46,20 +53,31 @@ export default function Post(){
     const [subtitle,setSubtitle] = useState("")
     const [blog,setBlog] = useState("")
     const [path,setPath] = useState<File>()
+    const [data,setData] = useState<Item>()
     const [loading,setLoading] = useState(false)
     useEffect(()=>{
         (async()=>{
             await auth.authStateReady()
-           if(auth.currentUser!=null) return;
-           else{
+           
+           if(auth.currentUser==null){
             router.push('/')
            }
-           
-        })()
+           setLoading(true)
+           const querySnapshot =  await getDocs(query(collection(firestore,params.category),where('id','==',params.postId)))
+           setLoading(false)
+           querySnapshot.forEach((doc:DocumentData) => {
+              setData(doc.data())
+              
+        })
+        if(data==null) return;
+        setTitle(data.title)
+              setSubtitle(data.subtitle)
+              setBlog(data.text)
+              setLoading(false)
+       
+    })()
     },[router])
-    function handleChange(e:any){
-        setPath(e.target.files[0])
-      }
+    
       function handleTitle(e:any){
         setTitle(e.target.value)
       }
@@ -70,22 +88,22 @@ export default function Post(){
         setBlog(e.target.value)
       }
       async function handleSubmit(){
-        if(path==null) return;
-        const picRef = ref(storage,`images/${path.name+v4()}`)
-        setLoading(true)
-        await uploadBytes(picRef,path);
-       const url = await getDownloadURL(picRef)
-        await addDoc(collection(firestore,value),{
-            id: v4(),
-            title: title,
-            subtitle: subtitle,
-            date: Timestamp.fromDate(new Date()),
-            url: url,
-            text: blog,
-        })
+        // setLoading(true)
+       const querySnapshot = await getDocs(query(collection(firestore,params.category),where('id','==',params.postId)))
+       const temp = querySnapshot.docs.at(0)
+            await setDoc(doc(firestore,params.category,temp?.id as string),{
+                title: title,
+                subtitle: subtitle,
+                date: Timestamp.fromDate(new Date()),
+                text: blog,
+            },{merge: true})
+
         setLoading(false)
         router.push('/')
-      }
+        }
+
+        
+      
     return (
         <main className='container h-14 w-full items-center'>
         <Navbar/>
@@ -93,67 +111,22 @@ export default function Post(){
             <div>
             <div className="grid w-full max-w-sm items-center gap-1.5 py-5">
       <Label>Title</Label>
-      <Input placeholder="Enter the title of the article" onChange={handleTitle}/>
+      <Input placeholder={data==null ? "Enter the title of the article" : data.title} onChange={handleTitle}/>
     </div>
     <div className="grid w-full max-w-sm items-center gap-1.5 py-5">
       <Label>Subtitle</Label>
-      <Input placeholder="Enter the subtitle of the article" onChange={handleSubtitle}/>
+      <Input placeholder={data==null ? "Enter the subtitle of the article" : data.subtitle}  onChange={handleSubtitle}/>
     </div>
-    <div className="grid w-full max-w-sm items-center gap-1.5 py-5">
+    {/* <div className="grid w-full max-w-sm items-center gap-1.5 py-5">
       <Label className="text-md">Picture</Label>
       <Input id="picture" type="file" onChange={handleChange} />
-    </div>
-        <div className="grid w-full items-center gap-1.5 py-5">
-            <Label>Category</Label>
-            <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between ring-2 ring-slate-500"
-        >
-           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Choose Category"}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-        
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
-          <CommandGroup>
-            {frameworks.map((framework) => (
-              <CommandItem
-                key={framework.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue)
-                  setOpen(false)
-                }}
-              >
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0"
-                  )}
-                />
-                {framework.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-                    </PopoverContent>
-            </Popover>
-        </div>
-            </div>
-        <div>
+    </div> */}
+     
             <div className="grid w-full items-center gap-1.5 py-5">
             <Label>
                 Article
             </Label>
-            <Textarea rows={20} placeholder="Type Here" className="ring-2 ring-slate-500" onChange={handleBlog}/>
+            <Textarea rows={20} placeholder={data==null ? "Type here" : data.text}  className="ring-2 ring-slate-500" onChange={handleBlog}/>
             </div>
             <Button className="justify-center" onClick={handleSubmit}>Post</Button>
         </div>
