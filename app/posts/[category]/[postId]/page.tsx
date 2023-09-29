@@ -83,7 +83,7 @@ export default function AllPosts({ params }: { params: { category: string,postId
       </div>
         </div>
         </div> : <h1>Please wait</h1>}
-       {isLogin &&  <div className="grid lg:grid-cols-2 grid-cols-1 justify-center grid-rows-auto gap-5 md:gap-y-20 gap-y-10 mt-10 mx-6">
+       {isLogin &&  <div className="grid lg:grid-cols-2 grid-cols-1 justify-center grid-rows-auto gap-5 md:gap-y-20 gap-y-2 mt-10 mx-6">
          <div className="flex md:justify-end justify-center">
          <Button className="px-10 w-4" onClick={handleEdit}>Edit</Button>
           </div>

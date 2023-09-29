@@ -17,7 +17,7 @@ export default function Home() {
       <div className='' >
       <Navbar/>
       </div>
-      <div className='container w-full'>
+      <div className='sm:container px-2 w-full'>
 <Hero/>
 
 <CustomSection {...{name: "movies"} as Category}/>
