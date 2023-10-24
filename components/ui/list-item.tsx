@@ -1,25 +1,17 @@
 import Image from "next/image";
-import Link from "next/link";
 import { poppins } from "../fonts";
-import { Timestamp } from "firebase/firestore";
 
-type ItemType = {
-    id: string,
-    title: string,
-    date: Timestamp,
-    url: string,
-    subtitle: string,
-    text: string
-}
 
-export default function ListItem(item: ItemType){
+
+
+export default function ListItem(item: Item){
     return (
         <div className='flex justify-center'>
       
       <div className="group flex flex-col items-start text-dark dark:text-light w-[90%]">
       <div className="rounded-xl overflow-hidden relative lg:h-[30vh] lg:w-[100%] h-[21vh] w-[1005]">
         <Image
-          src={item!=null ? item.url : '/bg4.jpg'}
+          src= {item.url} 
           // placeholder="blur"
           // blurDataURL={blog.image.blurhashDataUrl}
           alt={'pic'}

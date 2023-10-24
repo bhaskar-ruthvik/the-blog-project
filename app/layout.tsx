@@ -5,10 +5,8 @@ import { poppins } from '@/components/fonts'
 
 
 
-export const metadata: Metadata = {
-  title: 'Blog.ly',
-  description: 'A blog about everything.',
-}
+
+
 
 export default function RootLayout({
   children,
@@ -17,6 +15,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel='icon' type='image/x-icon' href='images/favicon.ico' sizes='any'></link>
+        <link
+  rel="apple-touch-icon"
+  href="images/apple-icon.png"
+  type="image/png"
+  sizes="any"
+/>
+   
+      </head>
       <body className={poppins.className}>
         <ThemeProvider
         attribute="class"

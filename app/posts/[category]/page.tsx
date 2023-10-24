@@ -1,35 +1,33 @@
-"use client"
-import { firestore } from "@/ firebase/firebase"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
 import ListItem from "@/components/ui/list-item"
-import { Skeleton } from "@/components/ui/skeleton"
-import { DocumentData, Timestamp, collection, getDocs, query, where } from "firebase/firestore"
+import getPostsByCategory from "@/lib/getPostsByCategory"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-interface Item{
-    id: string,
-    title: string,
-    date: Timestamp,
-    url: string,
-    subtitle: string,
-    text:string
+import { notFound } from "next/navigation"
+
+type Props = {
+  params: {
+    category: string
   }
-export default function AllPosts({ params }: { params: { category: string }}){
-    const [loading,setLoading] = useState(false)
-    const [data,setData] = useState<Item[]>([])
-    useEffect(()=>{
-        (async()=>{
-            setLoading(true)
-         const querySnapshot =  await getDocs(collection(firestore,params.category))
-         setLoading(false)
-        const items:Item[] = []
-         querySnapshot.forEach((doc:DocumentData) => {
-            items.push(doc.data())
-        });
-        setData(items)
-        })()
-    },[loading,data,params.category])
+}
+export async function generateMetadata({params} :Props){
+  const postsData = getPostsByCategory(params.category)
+  const data = await postsData
+  if(data == undefined) return {
+    title: "Page Not Found",
+    description: 'This page was not found'
+  }
+  const title = params.category.slice(0,1).toUpperCase() + params.category.slice(1) 
+  return {
+    title: title,
+    description: `This page contains posts about ${params.category}`
+  }
+}
+export default async function AllPosts({ params }: Props){
+
+    const postsData = getPostsByCategory(params.category)
+    const data = await postsData
+    if(data == undefined) return notFound()
     return (<>
       <Navbar/>
     <div className="container w-full">
@@ -38,14 +36,7 @@ export default function AllPosts({ params }: { params: { category: string }}){
             {data.map((item,index) => {
               return <Link href={'/posts/' + params.category + '/' + item.id} key={index}><ListItem {...item}/></Link>
             }) }
-            </div>: loading ?  <div className="flex items-center space-x-4">
-            
-            <div className="space-y-2 mx-10">
-              <Skeleton className="h-4 w-[30vh]" />
-              <Skeleton className="h-4 w-[25vh]" />
-            </div>
-            
-          </div>:<h1 className="text-2xl w-full justify-center mx-10">Sorry there are no items...</h1>}
+            </div>:<h1 className="text-2xl w-full justify-center mx-10">Sorry there are no items...</h1>}
     </div>
     <div className="container w-full">
           <hr className='border-0 h-[0.2rem] bg-orange-400 mt-10' ></hr>

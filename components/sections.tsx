@@ -1,4 +1,4 @@
-"use client"
+
 import { useEffect, useState } from "react"
 import ListItem from "./ui/list-item"
 import { DocumentData, Timestamp, collection, getDocs } from "firebase/firestore"
@@ -6,6 +6,8 @@ import { firestore } from "@/ firebase/firebase"
 import { poppins } from "./fonts"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
+import getPostsByCategory from "@/lib/getPostsByCategory"
+import { notFound } from "next/navigation"
 interface Item{
     id: string,
     title: string,
@@ -17,21 +19,10 @@ interface Item{
 type Category = {
     name: string
 }
-export default function CustomSection(category: Category){
-    const [data,setData] = useState<Item[]>([])
-    const [loading,setLoading] = useState(false)
-    useEffect(() => {
-      (async () => {
-        setLoading(true)
-         const querySnapshot =  await getDocs(collection(firestore,category.name))
-         setLoading(false)
-        const items:Item[] = []
-         querySnapshot.forEach((doc:DocumentData) => {
-            items.push(doc.data())
-        });
-        setData(items)
-      })()
-  },[loading,data,category.name])
+export default async function CustomSection(category: Category){
+    const postsData = getPostsByCategory(category.name)
+    const data = await postsData
+    if(data == undefined) return notFound()
     return (
 <div>
 <div className="w-full flex  justify-between items-end">
@@ -62,14 +53,7 @@ export default function CustomSection(category: Category){
         </Link>
       
       }) }
-      </div>: loading ?  <div className="flex items-center space-x-4">
-      
-      <div className="space-y-2 mx-10">
-        <Skeleton className="h-4 w-[30vh]" />
-        <Skeleton className="h-4 w-[25vh]" />
-      </div>
-      
-    </div>:<h1 className="text-2xl w-full justify-center mx-10">Sorry there are no items...</h1>}
+      </div>:<h1 className="text-2xl w-full justify-center mx-10">Sorry there are no items...</h1>}
   
       </div>
       

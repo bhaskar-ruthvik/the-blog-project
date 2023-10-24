@@ -5,10 +5,20 @@ import Hero from '@/components/hero'
 
 import CustomSection from '@/components/sections'
 import Footer from '@/components/footer'
+import { Metadata } from 'next'
 
 interface Category{
   name: string
 }
+export const metadata: Metadata = {
+  icons:{
+    icon: "https://example.com/favicon.ico",
+    apple: "https://example.com/apple-icon.png"
+  },
+  title: 'Blog.ly',
+  description: 'A blog about everything.',
+}
+
 export default function Home() {
 
   return (
