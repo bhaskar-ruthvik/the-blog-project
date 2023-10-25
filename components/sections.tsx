@@ -8,7 +8,6 @@ import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 import getPostsByCategory from "@/lib/getPostsByCategory"
 import { notFound } from "next/navigation"
-import connectDB from "@/lib/mongooseInit"
 
 type Category = {
     name: string
