@@ -1,23 +1,13 @@
 "use client"
-import { app, auth, firestore, storage } from "@/ firebase/firebase";
+import { auth, firestore} from "@/ firebase/firebase";
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
-
 import { Input } from "@/components/ui/input";
-import { InputFile } from "@/components/ui/pic-button";
-import { Popover } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import { PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
 import { DocumentData, Timestamp, addDoc, collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
-import firebase from 'firebase/app'
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {v4} from "uuid"
 interface Item{
     id: string,
     title: string,
@@ -58,7 +48,6 @@ export default function EditPost({params} : { params: { category: string,postId:
     useEffect(()=>{
         (async()=>{
             await auth.authStateReady()
-           
            if(auth.currentUser==null){
             router.push('/')
            }

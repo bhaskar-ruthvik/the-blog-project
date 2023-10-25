@@ -24,7 +24,6 @@ export async function generateMetadata({params} :Props){
   }
 }
 export default async function AllPosts({ params }: Props){
-
     const postsData = getPostsByCategory(params.category)
     const data = await postsData
     if(data == undefined) return notFound()

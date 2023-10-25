@@ -8,18 +8,13 @@ import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 import getPostsByCategory from "@/lib/getPostsByCategory"
 import { notFound } from "next/navigation"
-interface Item{
-    id: string,
-    title: string,
-    date: Timestamp,
-    url: string,
-    subtitle: string,
-    text:string
-  }
+import connectDB from "@/lib/mongooseInit"
+
 type Category = {
     name: string
 }
 export default async function CustomSection(category: Category){
+
     const postsData = getPostsByCategory(category.name)
     const data = await postsData
     if(data == undefined) return notFound()
