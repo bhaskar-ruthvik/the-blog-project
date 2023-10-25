@@ -1,4 +1,5 @@
 import { app, auth } from "@/ firebase/firebase"
+import EditRow from "@/components/editrow"
 import { poppins } from "@/components/fonts"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
@@ -37,10 +38,16 @@ export default async function AllPosts({ params }: Props) {
   // const [isLogin,setIsLogin] = useState(false)
   // const router = useRouter()
 
-  const [data,isLoggedIn] = await Promise.all([getPostById(params.category, params.postId),getAuthState()])
+  const docsData = getPostById(params.category, params.postId)
+  const data = await docsData
   if (data == undefined) return notFound()
-  console.log(isLoggedIn)
   const paras: string[] = data.text.split("\\")
+  const passedIn = {
+    params: {
+      category: params.category,
+      postId: params.postId
+    }
+  }
   return (<>
     <Navbar />
     <div className="container sm:px-[2rem] px-[0.2rem]  w-full">
@@ -89,18 +96,7 @@ export default async function AllPosts({ params }: Props) {
           </div>
         </div>
       </div>
-      {isLoggedIn &&  <div className="grid lg:grid-cols-2 grid-cols-1 justify-center grid-rows-auto gap-5 md:gap-y-20 gap-y-2 mt-10 mx-6">
-         <div className="flex md:justify-end justify-center">
-          <Link href='/edit'>
-          <Button className="px-10 w-4">Edit</Button>
-          </Link>
-        
-          </div>
-         <div className="flex md:justify-start justify-center">
-         <Button className="px-10 w-4">Delete</Button>
-         </div>
-        
-        </div>}
+      <EditRow {...passedIn}/>
     </div>
     <div className="container w-full">
       <hr className='border-0 h-[0.2rem] bg-orange-400 mt-20' ></hr>
